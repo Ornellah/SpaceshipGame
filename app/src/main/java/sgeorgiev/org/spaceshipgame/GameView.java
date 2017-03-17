@@ -28,21 +28,32 @@ public class GameView extends SurfaceView implements Runnable {
     private SurfaceHolder surfaceHolder;
 
     //stars
-    StarManager starManager;
+    private StarManager starManager;
+
+    //enemies
+    private EnemyManager enemyManager;
 
     //constructor
     public GameView(Context context) {
         super(context);
+
+        //store the context in Constants
+        Constants.CURR_CONTEXT = context;
 
         //initialise player
         player = new Player(context);
 
         //and initialise drawing objects
         surfaceHolder = getHolder();
+
+        //initialise paint
         paint = new Paint();
 
         //initialise star manager
         starManager = new StarManager();
+
+        //initialise enemy manager
+        enemyManager = new EnemyManager(3);
     }
 
     @Override
@@ -62,6 +73,7 @@ public class GameView extends SurfaceView implements Runnable {
         //update player every frame
         player.update();
         starManager.update(player.getSpeed());
+        enemyManager.update(player.getSpeed());
     }
 
     private void draw() {
@@ -76,6 +88,8 @@ public class GameView extends SurfaceView implements Runnable {
             starManager.draw(this.canvas, this.paint);
             //draw player
             player.draw(this.canvas, this.paint);
+            //draw enemies
+            enemyManager.draw(this.canvas, this.paint);
             //unlock canvas
             surfaceHolder.unlockCanvasAndPost(canvas);
         }

@@ -28,15 +28,12 @@ public class Star implements GameObject{
     }
 
     @Override
-    public void update() {}
-    @Override
-    public void draw() {}
-
     public void draw(Canvas canvas, Paint paint) {
             paint.setStrokeWidth(this.getStarWidth());
             canvas.drawPoint(x, y, paint);
     }
 
+    @Override
     public void update(int playerSpeed) {
         //move stars left using player speed
         x -= playerSpeed;

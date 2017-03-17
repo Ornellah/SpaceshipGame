@@ -39,7 +39,8 @@ public class Player {
         speed = 1;
 
         //load asset
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.player);
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.player1);
+
         //set to false initially
         boosting = false;
 
@@ -58,7 +59,7 @@ public class Player {
        //if we're boosting
        if(boosting)
            //increase speed
-           x+=2;
+          speed += 2;
        else
            //if not, slow down
            speed -= 5;

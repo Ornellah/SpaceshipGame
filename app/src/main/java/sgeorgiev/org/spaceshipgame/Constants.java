@@ -1,5 +1,7 @@
 package sgeorgiev.org.spaceshipgame;
 
+import android.content.Context;
+
 /**
  * Created by Svetlozar Georgiev on 17/03/2017.
  */
@@ -16,5 +18,7 @@ public class Constants {
     public static final int MIN_SPEED = 1;
     public static final int MAX_SPEED = 20;
 
+    //store context here as well
+    public static Context CURR_CONTEXT;
 
 }
