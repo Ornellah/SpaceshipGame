@@ -32,21 +32,31 @@ public class EnemyManager {
 
     public void update(int speed, Player player) {
         for (Enemy e : enemies) {
+            //update enemies
             e.update(speed);
+            //check for collisions
             if(Rect.intersects(player.getHitBox(), e.getHitBox())) {
+                //set explosion to true so we know we have to draw it
                 explode = true;
+                //and initialise the object
                 explosion = new Explosion(e.getX(), e.getY());
+                //add the ship to be destryed to the array list
                 destroyed.add(e);
             }
         }
+        //destroy all ships AFTER the loop
         enemies.removeAll(destroyed);
     }
 
+    //draw
     public void draw(Canvas canvas, Paint paint) {
         for (Enemy e : enemies) {
+            //draw each space ship
             canvas.drawBitmap(e.getBitmap(), e.getX(), e.getY(), paint);
         }
+        //if we need an explosion
         if(explode) {
+            //draw it
             explosion.draw(canvas, paint);
             explode = false;
         }
