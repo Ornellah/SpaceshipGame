@@ -72,8 +72,8 @@ public class GameView extends SurfaceView implements Runnable {
     private void update() {
         //update player every frame
         player.update();
+        enemyManager.update(player.getSpeed(), player);
         starManager.update(player.getSpeed());
-        enemyManager.update(player.getSpeed());
     }
 
     private void draw() {

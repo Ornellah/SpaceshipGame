@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import java.util.Random;
 
@@ -23,7 +24,11 @@ public class Enemy implements GameObject {
     //enemy speed
     private int speed = 1;
 
+    //random number generator
     private Random generator;
+
+    //hit box
+    private Rect hitBox;
 
     //constructor
     public Enemy() {
@@ -35,6 +40,9 @@ public class Enemy implements GameObject {
         speed = generator.nextInt(6) + 10;
         x = Constants.SCREEN_WIDTH;
         y = generator.nextInt(Constants.SCREEN_HEIGHT) - bitmap.getHeight();
+
+        //create hitbox
+        hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
     }
 
     @Override
@@ -53,6 +61,21 @@ public class Enemy implements GameObject {
             x = Constants.SCREEN_WIDTH;
             y = generator.nextInt(Constants.SCREEN_HEIGHT) - bitmap.getHeight();
         }
+
+        //update hit box
+        hitBox.left = x;
+        hitBox.top = y;
+        hitBox.right = x + bitmap.getWidth();
+        hitBox.bottom = y + bitmap.getHeight();
+    }
+
+    public Rect getHitBox() {
+        return hitBox;
+    }
+
+    //setter for x
+    public void setX(int value) {
+        this.x = value;
     }
 
     //getters

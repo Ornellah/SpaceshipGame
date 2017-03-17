@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 /**
  * Created by Svetlozar Georgiev on 17/03/2017.
@@ -31,6 +32,9 @@ public class Player {
     private int maxY;
     private int minY;
 
+    //rectangle to use for collision detection
+    private Rect hitBox;
+
     //constructor
     public Player(Context context) {
         //set initial location and speed
@@ -47,6 +51,9 @@ public class Player {
         //min and max y
         minY = 0;
         maxY = Constants.SCREEN_HEIGHT - bitmap.getHeight();
+
+        //create the hitbox
+        hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
     }
 
     //setter for boosting
@@ -81,6 +88,12 @@ public class Player {
         if (y > maxY) {
             y = maxY;
         }
+
+        //need to make sure the hitbox is updated every frame
+        hitBox.left = x;
+        hitBox.top = y;
+        hitBox.right = x + bitmap.getWidth();
+        hitBox.bottom = y + bitmap.getHeight();
     }
 
     public void draw(Canvas canvas, Paint paint) {
@@ -103,4 +116,10 @@ public class Player {
     public int getSpeed() {
         return speed;
     }
+
+    public Rect getHitBox() {
+        return hitBox;
+    }
+
+
 }
