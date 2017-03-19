@@ -33,7 +33,7 @@ public class Enemy implements GameObject {
     //constructor
     public Enemy() {
         //load image
-        bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.enemy);
+        bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.enemy2);
 
         //create a random generator
         generator = new Random();

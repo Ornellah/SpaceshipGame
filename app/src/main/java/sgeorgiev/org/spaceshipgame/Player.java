@@ -53,7 +53,7 @@ public class Player {
         maxY = Constants.SCREEN_HEIGHT - bitmap.getHeight();
 
         //create the hitbox
-        hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+        hitBox = new Rect(x , y, bitmap.getWidth(), bitmap.getHeight());
     }
 
     //setter for boosting

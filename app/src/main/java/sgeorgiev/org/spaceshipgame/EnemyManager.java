@@ -17,8 +17,10 @@ public class EnemyManager {
     private boolean explode = false;
     Explosion explosion;
     ArrayList<Enemy> destroyed;
+    private int count;
 
     public EnemyManager(int enemyCount) {
+        this.count = enemyCount;
         enemies = new ArrayList<>();
         destroyed = new ArrayList<>();
         populateEnemies(enemyCount);
@@ -30,10 +32,19 @@ public class EnemyManager {
         }
     }
 
-    public void update(int speed, Player player) {
+    public void update(Player player) {
+        int diff = 0;
+        if(enemies.size() < count) {
+            diff = count - enemies.size();
+        }
+
+        for(int i = 0; i < diff; i++)
+            enemies.add(new Enemy());
+
+
         for (Enemy e : enemies) {
             //update enemies
-            e.update(speed);
+            e.update(player.getSpeed());
             //check for collisions
             if(Rect.intersects(player.getHitBox(), e.getHitBox())) {
                 //set explosion to true so we know we have to draw it

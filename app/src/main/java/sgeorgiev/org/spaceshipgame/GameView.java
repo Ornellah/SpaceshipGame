@@ -1,6 +1,7 @@
 package sgeorgiev.org.spaceshipgame;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -33,6 +34,12 @@ public class GameView extends SurfaceView implements Runnable {
     //enemies
     private EnemyManager enemyManager;
 
+    //create asteroids
+    private AsteroidManager asteroidManager;
+
+    //track if game is over
+    private boolean gameOver;
+
     //constructor
     public GameView(Context context) {
         super(context);
@@ -54,6 +61,12 @@ public class GameView extends SurfaceView implements Runnable {
 
         //initialise enemy manager
         enemyManager = new EnemyManager(3);
+
+        //initialise asteroids
+        asteroidManager = new AsteroidManager(3);
+
+        //need to track if game is over
+        gameOver = false;
     }
 
     @Override
@@ -70,15 +83,21 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     private void update() {
-        //update player every frame
-        player.update();
-        enemyManager.update(player.getSpeed(), player);
-        starManager.update(player.getSpeed());
+        //if game is nt over
+        if(!gameOver) {
+            //call update on every object
+            player.update();
+            enemyManager.update(player);
+            starManager.update(player.getSpeed());
+            gameOver = asteroidManager.update(player);
+        } else {
+            return;
+        }
     }
 
     private void draw() {
         //if surface is valid
-        if(surfaceHolder.getSurface().isValid()) {
+        if (surfaceHolder.getSurface().isValid()) {
             //lock the canvas
             canvas = surfaceHolder.lockCanvas();
             //set background colour
@@ -90,6 +109,16 @@ public class GameView extends SurfaceView implements Runnable {
             player.draw(this.canvas, this.paint);
             //draw enemies
             enemyManager.draw(this.canvas, this.paint);
+            //draw asteroids
+            asteroidManager.draw(this.canvas, this.paint);
+
+            if (gameOver) {
+                paint.setTextSize(150);
+                paint.setTextAlign(Paint.Align.CENTER);
+
+                int yPos = (int) ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2));
+                canvas.drawText("Game over", canvas.getWidth() / 2, yPos, paint);
+            }
             //unlock canvas
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
@@ -132,6 +161,8 @@ public class GameView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_DOWN:
                 //bost
                 player.setBoosting(true);
+                if(gameOver)
+                    Constants.CURR_CONTEXT.startActivity(new Intent(Constants.CURR_CONTEXT, MainActivity.class));
                 break;
         }
         return true;
