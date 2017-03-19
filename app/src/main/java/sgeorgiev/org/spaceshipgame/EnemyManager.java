@@ -46,14 +46,19 @@ public class EnemyManager {
             //update enemies
             e.update(player.getSpeed());
             //check for collisions
-            if(Rect.intersects(player.getHitBox(), e.getHitBox())) {
-                //set explosion to true so we know we have to draw it
-                explode = true;
-                //and initialise the object
-                explosion = new Explosion(e.getX(), e.getY());
-                //add the ship to be destryed to the array list
-                destroyed.add(e);
+            for(Projectile p : player.getProjectiles()) {
+                if (Rect.intersects(p.getHitBox(), e.getHitBox())) {
+                    //set explosion to true so we know we have to draw it
+                    explode = true;
+                    //and initialise the object
+                    explosion = new Explosion(e.getX(), e.getY());
+                    //add the ship to be destryed to the array list
+                    destroyed.add(e);
+                    player.destroyProjectile(p);
+                }
             }
+            if(Rect.intersects(player.getHitBox(), e.getHitBox()) || Rect.intersects(player.getHitBoxWings(), e.getHitBox()))
+                Constants.GAME_OVER = true;
         }
         //destroy all ships AFTER the loop
         enemies.removeAll(destroyed);
@@ -63,7 +68,7 @@ public class EnemyManager {
     public void draw(Canvas canvas, Paint paint) {
         for (Enemy e : enemies) {
             //draw each space ship
-            canvas.drawBitmap(e.getBitmap(), e.getX(), e.getY(), paint);
+            e.draw(canvas, paint);
         }
         //if we need an explosion
         if(explode) {

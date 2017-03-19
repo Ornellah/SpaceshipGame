@@ -19,7 +19,7 @@ public class Asteroid implements GameObject{
     private int x;
     private int y;
     //speed - will probably not need speed as they will not move towards the player
-   // int speed = 0;
+    int speed = 1;
 
     //random generator
     Random generator;
@@ -40,9 +40,10 @@ public class Asteroid implements GameObject{
     }
 
     @Override
-    public void update(int speed) {
+    public void update(int playerSpeed) {
         //move the asteroid with the screen
-        x -= speed;
+        x -= playerSpeed;
+        x -= this.speed;
         //when it reaches x = 0, move to the right again
         if(x < Constants.MIN_X) {
             x = generator.nextInt((Constants.SCREEN_WIDTH - 2 * Constants.SCREEN_WIDTH / 3) + 1) + 2 * Constants.SCREEN_WIDTH/3;
@@ -50,10 +51,11 @@ public class Asteroid implements GameObject{
         }
 
         //update hit box every frame
-        hitBox.left = x;
-        hitBox.top = y;
-        hitBox.right = x + bitmap.getWidth();
-        hitBox.bottom = y + bitmap.getHeight();
+        //had to reduce the hitbox as it wasn't very accurate hence the substractions
+        hitBox.left = x + 35;
+        hitBox.top = y + 38;
+        hitBox.right = x + bitmap.getWidth() - 35;
+        hitBox.bottom = y + bitmap.getHeight() - 35;
     }
 
     @Override

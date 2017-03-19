@@ -1,6 +1,7 @@
 package sgeorgiev.org.spaceshipgame;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
@@ -23,18 +24,26 @@ public class AsteroidManager {
             asteroids.add(new Asteroid());
     }
 
-    public boolean update(Player player) {
+    public void update(Player player) {
         for(Asteroid a : asteroids) {
             a.update(player.getSpeed());
-            if (Rect.intersects(player.getHitBox(), a.getHitBox())) {
-                return true;
+            if (Rect.intersects(player.getHitBox(), a.getHitBox()) || Rect.intersects(player.getHitBoxWings(), a.getHitBox())) {
+                Constants.GAME_OVER = true;
+            }
+            for(Projectile p : player.getProjectiles()) {
+                if(Rect.intersects(p.getHitBox(), a.getHitBox()))
+                    player.destroyProjectile(p);
             }
         }
-        return false;
     }
 
     public void draw(Canvas canvas, Paint paint) {
-        for(Asteroid a : asteroids)
+        for(Asteroid a : asteroids) {
+            if(Constants.TEST_MODE) {
+                paint.setColor(Color.RED);
+                canvas.drawRect(a.getHitBox(), paint);
+            }
             a.draw(canvas, paint);
+        }
     }
 }

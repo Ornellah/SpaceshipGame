@@ -9,6 +9,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.Random;
+
 /**
  * Created by Svetlozar Georgiev on 17/03/2017.
  */
@@ -37,12 +39,20 @@ public class GameView extends SurfaceView implements Runnable {
     //create asteroids
     private AsteroidManager asteroidManager;
 
-    //track if game is over
-    private boolean gameOver;
+    //random generator
+    Random generator;
+
+    //frame counter
+    private int frameCount;
 
     //constructor
     public GameView(Context context) {
         super(context);
+
+        Constants.GAME_OVER = false;
+
+        //initialise random gen
+        generator = new Random();
 
         //store the context in Constants
         Constants.CURR_CONTEXT = context;
@@ -60,13 +70,12 @@ public class GameView extends SurfaceView implements Runnable {
         starManager = new StarManager();
 
         //initialise enemy manager
-        enemyManager = new EnemyManager(3);
+        enemyManager = new EnemyManager(generator.nextInt(5));
 
         //initialise asteroids
         asteroidManager = new AsteroidManager(3);
 
-        //need to track if game is over
-        gameOver = false;
+        frameCount = 0;
     }
 
     @Override
@@ -75,6 +84,8 @@ public class GameView extends SurfaceView implements Runnable {
         while (playing) {
             //update the frame
             update();
+            //increment every frame
+            frameCount++;
             //draw objects on the frame
             draw();
             //control
@@ -84,12 +95,15 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void update() {
         //if game is nt over
-        if(!gameOver) {
+        if(!Constants.GAME_OVER) {
             //call update on every object
             player.update();
             enemyManager.update(player);
             starManager.update(player.getSpeed());
-            gameOver = asteroidManager.update(player);
+            asteroidManager.update(player);
+            if(frameCount % 15 == 0)
+                player.getProjectiles().add(new Projectile(player.getX() + player.getBitmap().getWidth(),
+                        player.getY() + player.getBitmap().getHeight()/2, 20, "player"));
         } else {
             return;
         }
@@ -112,7 +126,7 @@ public class GameView extends SurfaceView implements Runnable {
             //draw asteroids
             asteroidManager.draw(this.canvas, this.paint);
 
-            if (gameOver) {
+            if (Constants.GAME_OVER) {
                 paint.setTextSize(150);
                 paint.setTextAlign(Paint.Align.CENTER);
 
@@ -161,7 +175,7 @@ public class GameView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_DOWN:
                 //bost
                 player.setBoosting(true);
-                if(gameOver)
+                if(Constants.GAME_OVER)
                     Constants.CURR_CONTEXT.startActivity(new Intent(Constants.CURR_CONTEXT, MainActivity.class));
                 break;
         }

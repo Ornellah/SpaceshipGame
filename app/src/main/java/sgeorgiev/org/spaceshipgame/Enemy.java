@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -30,6 +32,9 @@ public class Enemy implements GameObject {
     //hit box
     private Rect hitBox;
 
+    //enemies can shoot as well but more slowly
+    Projectile projectile;
+
     //constructor
     public Enemy() {
         //load image
@@ -43,11 +48,19 @@ public class Enemy implements GameObject {
 
         //create hitbox
         hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+
+        //initialise
+        projectile = new Projectile(this.x, this.y + bitmap.getHeight()/2, this.speed*2, "enemy");
     }
 
     @Override
     public void draw(Canvas canvas, Paint paint) {
+        if(Constants.TEST_MODE) {
+            paint.setColor(Color.RED);
+            canvas.drawRect(hitBox, paint);
+        }
         canvas.drawBitmap(bitmap, x, y, paint);
+        projectile.draw(canvas, paint);
     }
 
     @Override
@@ -64,9 +77,13 @@ public class Enemy implements GameObject {
 
         //update hit box
         hitBox.left = x;
-        hitBox.top = y;
+        hitBox.top = y + 10;
         hitBox.right = x + bitmap.getWidth();
-        hitBox.bottom = y + bitmap.getHeight();
+        hitBox.bottom = y + bitmap.getHeight() - 10;
+
+        projectile.update("left");
+        if(projectile.getX() < Constants.MIN_X)
+            projectile = new Projectile(this.x, this.y + bitmap.getHeight()/2, this.speed*2, "enemy");
     }
 
     public Rect getHitBox() {

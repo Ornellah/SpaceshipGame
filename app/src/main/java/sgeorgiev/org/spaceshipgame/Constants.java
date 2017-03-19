@@ -21,4 +21,9 @@ public class Constants {
     //store context here as well
     public static Context CURR_CONTEXT;
 
+    //this will be used for testing purposes
+    public static boolean TEST_MODE = false;
+
+    public static boolean GAME_OVER;
+
 }

@@ -4,8 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+
+import java.util.ArrayList;
 
 /**
  * Created by Svetlozar Georgiev on 17/03/2017.
@@ -25,8 +28,9 @@ public class Player {
     //going up?
     private boolean boosting;
 
-    //gravity to make the ship go down the screen
-    private final int GRAVITY = -10;
+    //weapon
+    ArrayList<Projectile> projectiles;
+    ArrayList<Projectile> removedProjectiles;
 
     //Controlling Y coordinate so that ship won't go outside the screen
     private int maxY;
@@ -34,6 +38,8 @@ public class Player {
 
     //rectangle to use for collision detection
     private Rect hitBox;
+    private Rect hitBoxWings;
+
 
     //constructor
     public Player(Context context) {
@@ -54,6 +60,11 @@ public class Player {
 
         //create the hitbox
         hitBox = new Rect(x , y, bitmap.getWidth(), bitmap.getHeight());
+        hitBoxWings = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+
+        //projectiles
+        projectiles = new ArrayList<>();
+        removedProjectiles = new ArrayList<>();
     }
 
     //setter for boosting
@@ -90,14 +101,44 @@ public class Player {
         }
 
         //need to make sure the hitbox is updated every frame
-        hitBox.left = x;
-        hitBox.top = y;
-        hitBox.right = x + bitmap.getWidth();
-        hitBox.bottom = y + bitmap.getHeight();
+        //had to reduce the hitbox as it wasn't very accurate hence the substractions
+        hitBox.left = x + 10;
+        hitBox.top = y + 35;
+        hitBox.right = x + bitmap.getWidth() - 10;
+        hitBox.bottom = y + bitmap.getHeight() - 35;
+
+        //update the other hitbox as well
+        hitBoxWings.left = x + 45;
+        hitBoxWings.top = y;
+        hitBoxWings.right = x + bitmap.getWidth() - 115;
+        hitBoxWings.bottom = y + bitmap.getHeight();
+
+        for(Projectile p : projectiles) {
+            if(p.checkState()) {
+                //store projectiles which reach the end of the screen
+                removedProjectiles.add(p);
+            }
+            //update position
+            p.update();
+        }
+        //remove them after the loop
+        projectiles.removeAll(removedProjectiles);
     }
 
     public void draw(Canvas canvas, Paint paint) {
+        if(Constants.TEST_MODE) {
+            paint.setColor(Color.RED);
+            canvas.drawRect(hitBox, paint);
+            canvas.drawRect(hitBoxWings, paint);
+        }
         canvas.drawBitmap(this.bitmap, this.x, this.y, paint);
+
+        for(Projectile p : projectiles)
+            p.draw(canvas, paint);
+    }
+
+    public void destroyProjectile(Projectile proj) {
+        removedProjectiles.add(proj);
     }
 
     //getters
@@ -119,6 +160,12 @@ public class Player {
 
     public Rect getHitBox() {
         return hitBox;
+    }
+
+    public Rect getHitBoxWings() {return hitBoxWings;}
+
+    public ArrayList<Projectile> getProjectiles() {
+        return projectiles;
     }
 
 
