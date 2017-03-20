@@ -62,7 +62,7 @@ public class Projectile implements GameObject {
         hitBox.bottom = y + bitmap.getHeight();
     }
 
-    public int getSpeed() {
+    public float getSpeed() {
         return speed;
     }
 

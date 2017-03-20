@@ -18,8 +18,11 @@ public class Asteroid implements GameObject{
     //coordinates
     private int x;
     private int y;
-    //speed - will probably not need speed as they will not move towards the player
+    //speed
     int speed = 1;
+
+    private final int max = Constants.SCREEN_WIDTH + 60;
+    private final int min = Constants.SCREEN_WIDTH;
 
     //random generator
     Random generator;
@@ -33,8 +36,9 @@ public class Asteroid implements GameObject{
         //initialise random generator
         generator = new Random();
         //set coordinates
-        x = generator.nextInt((Constants.SCREEN_WIDTH - 2 * Constants.SCREEN_WIDTH / 3) + 1) + 2 * Constants.SCREEN_WIDTH/3;
+        x = generator.nextInt(max - min + 1) + min;
         y = generator.nextInt(Constants.SCREEN_HEIGHT) - bitmap.getHeight();
+
         //calculate hit box
         hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
     }
@@ -46,7 +50,7 @@ public class Asteroid implements GameObject{
         x -= this.speed;
         //when it reaches x = 0, move to the right again
         if(x < Constants.MIN_X) {
-            x = generator.nextInt((Constants.SCREEN_WIDTH - 2 * Constants.SCREEN_WIDTH / 3) + 1) + 2 * Constants.SCREEN_WIDTH/3;
+            x = generator.nextInt(max - min + 1) + min;
             y = generator.nextInt(Constants.SCREEN_HEIGHT) - bitmap.getHeight();
         }
 

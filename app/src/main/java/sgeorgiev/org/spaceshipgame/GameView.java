@@ -51,6 +51,10 @@ public class GameView extends SurfaceView implements Runnable {
     //shared prefs for the highscore
     SharedPreferences sharedPreferences;
 
+    //need to track time as difficulty should increase with time
+    private long initTime, deltaTime, startTime;
+    private int elapsedTime;
+
     //constructor
     public GameView(Context context) {
         super(context);
@@ -76,10 +80,10 @@ public class GameView extends SurfaceView implements Runnable {
         starManager = new StarManager();
 
         //initialise enemy manager
-        enemyManager = new EnemyManager(generator.nextInt(5));
+        enemyManager = new EnemyManager(1);
 
         //initialise asteroids
-        asteroidManager = new AsteroidManager(3);
+        asteroidManager = new AsteroidManager(1);
 
         //set the frame count to 0 in the beginning
         Constants.FRAME_COUNT = 0;
@@ -93,6 +97,9 @@ public class GameView extends SurfaceView implements Runnable {
         highScore[0] = sharedPreferences.getInt("score1", 0);
         highScore[1] = sharedPreferences.getInt("score2", 0);
         highScore[2] = sharedPreferences.getInt("score3", 0);
+
+        //set init time
+        startTime = initTime = System.currentTimeMillis();
     }
 
     @Override
@@ -113,6 +120,11 @@ public class GameView extends SurfaceView implements Runnable {
     private void update() {
         //if game is nt over
         if(!Constants.GAME_OVER) {
+            deltaTime = (int) (System.currentTimeMillis() - startTime);
+            startTime = System.currentTimeMillis();
+            elapsedTime = (int) (System.currentTimeMillis() - initTime)/1000;
+            Constants.ELAPSED_TIME = elapsedTime;
+            Log.d("FRAMES ", ""+ Constants.FRAME_COUNT);
             //call update on every object
             player.update();
             enemyManager.update(player);
@@ -170,6 +182,10 @@ public class GameView extends SurfaceView implements Runnable {
                 //tell the player
                 int yPos = (int) ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2));
                 canvas.drawText("Game over", canvas.getWidth() / 2, yPos, paint);
+
+                paint.setTextSize(50);
+                yPos = (int) ((canvas.getHeight() - 2 * paint.descent()) - ((paint.descent() + paint.ascent()) / 2));
+                canvas.drawText("Tap anywhere to return to main menu...", canvas.getWidth() / 2, yPos, paint);
             }
             //unlock canvas
             surfaceHolder.unlockCanvasAndPost(canvas);
@@ -211,10 +227,10 @@ public class GameView extends SurfaceView implements Runnable {
                 break;
             //when pressed
             case MotionEvent.ACTION_DOWN:
-                //bost
-                player.setBoosting(true);
-                if(Constants.GAME_OVER)
+                //boost
+                if(Constants.GAME_OVER && System.currentTimeMillis() - Constants.GAMEOVER_TIME >= 1000)
                     Constants.CURR_CONTEXT.startActivity(new Intent(Constants.CURR_CONTEXT, MainActivity.class));
+                player.setBoosting(true);
                 break;
         }
         return true;

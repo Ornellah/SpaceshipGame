@@ -23,7 +23,7 @@ public class EnemyManager {
         this.count = enemyCount;
         enemies = new ArrayList<>();
         destroyed = new ArrayList<>();
-        populateEnemies(enemyCount);
+        populateEnemies(count);
     }
 
     public void populateEnemies(int count) {
@@ -59,11 +59,20 @@ public class EnemyManager {
                     Constants.SCORE += 10;
                 }
             }
-            if(Rect.intersects(player.getHitBox(), e.getHitBox()) || Rect.intersects(player.getHitBoxWings(), e.getHitBox()))
+            if(Rect.intersects(player.getHitBox(), e.getHitBox()) || Rect.intersects(player.getHitBoxWings(), e.getHitBox())) {
                 Constants.GAME_OVER = true;
+                Constants.GAMEOVER_TIME = System.currentTimeMillis();
+            }
         }
         //destroy all ships AFTER the loop
         enemies.removeAll(destroyed);
+
+        //every 9 seconds (60 fps * 9 seconds) add a new enemy to increase the difficulty of the game
+        //the calculation is not particularly accurate but it works
+        if(Constants.FRAME_COUNT % (60 * 9) == 0 && enemies.size() < 6 && Constants.FRAME_COUNT != 0) {
+            enemies.add(new Enemy());
+            count++;
+        }
     }
 
     //draw

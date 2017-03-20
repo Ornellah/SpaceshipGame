@@ -33,4 +33,8 @@ public class Constants {
     //score will be saved here as well so it can be accessed from anywhere
     public static int SCORE;
 
+    public static int ELAPSED_TIME = 0;
+
+    public static long GAMEOVER_TIME = 0;
+
 }
