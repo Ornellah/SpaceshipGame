@@ -15,6 +15,7 @@ import java.util.Random;
  * Created by Svetlozar Georgiev on 17/03/2017.
  */
 
+
 public class Enemy implements GameObject {
     //enemy sprite
     private Bitmap bitmap;

@@ -123,6 +123,14 @@ public class Player {
         }
         //remove them after the loop
         projectiles.removeAll(removedProjectiles);
+
+        //every 15 frames
+        if(Constants.FRAME_COUNT % 15 == 0) {
+            //shoot
+            projectiles.add(new Projectile(x + bitmap.getWidth(),
+                   y + bitmap.getHeight()/2, 20, "player"));
+        }
+
     }
 
     public void draw(Canvas canvas, Paint paint) {

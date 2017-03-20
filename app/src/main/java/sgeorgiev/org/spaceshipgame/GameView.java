@@ -2,14 +2,17 @@ package sgeorgiev.org.spaceshipgame;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.Random;
+import java.util.concurrent.CompletionService;
 
 /**
  * Created by Svetlozar Georgiev on 17/03/2017.
@@ -42,8 +45,11 @@ public class GameView extends SurfaceView implements Runnable {
     //random generator
     Random generator;
 
-    //frame counter
-    private int frameCount;
+    //highscore
+    int highScore[];
+
+    //shared prefs for the highscore
+    SharedPreferences sharedPreferences;
 
     //constructor
     public GameView(Context context) {
@@ -75,7 +81,18 @@ public class GameView extends SurfaceView implements Runnable {
         //initialise asteroids
         asteroidManager = new AsteroidManager(3);
 
-        frameCount = 0;
+        //set the frame count to 0 in the beginning
+        Constants.FRAME_COUNT = 0;
+
+        //set score to 0 when the game starts
+        Constants.SCORE = 0;
+        highScore = new int[3];
+
+        //init shared prefs as well
+        sharedPreferences = context.getSharedPreferences("HIGH_SCORE", Context.MODE_PRIVATE);
+        highScore[0] = sharedPreferences.getInt("score1", 0);
+        highScore[1] = sharedPreferences.getInt("score2", 0);
+        highScore[2] = sharedPreferences.getInt("score3", 0);
     }
 
     @Override
@@ -85,7 +102,7 @@ public class GameView extends SurfaceView implements Runnable {
             //update the frame
             update();
             //increment every frame
-            frameCount++;
+            Constants.FRAME_COUNT++;
             //draw objects on the frame
             draw();
             //control
@@ -101,11 +118,24 @@ public class GameView extends SurfaceView implements Runnable {
             enemyManager.update(player);
             starManager.update(player.getSpeed());
             asteroidManager.update(player);
-            if(frameCount % 15 == 0)
-                player.getProjectiles().add(new Projectile(player.getX() + player.getBitmap().getWidth(),
-                        player.getY() + player.getBitmap().getHeight()/2, 20, "player"));
         } else {
-            return;
+            playing = false;
+
+            for(int i = 0; i < highScore.length; i++) {
+                if (Constants.SCORE > highScore[i]) {
+                    final int endI = i;
+                    highScore[i] = Constants.SCORE;
+                    Log.d("SCORE ", "" + highScore[i]);
+                    break;
+                }
+            }
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            for(int i = 0; i < highScore.length; i++) {
+                int index = i + 1;
+                editor.putInt("score" + index, highScore[i]);
+            }
+            editor.apply();
         }
     }
 
@@ -126,10 +156,18 @@ public class GameView extends SurfaceView implements Runnable {
             //draw asteroids
             asteroidManager.draw(this.canvas, this.paint);
 
-            if (Constants.GAME_OVER) {
-                paint.setTextSize(150);
-                paint.setTextAlign(Paint.Align.CENTER);
+            //draw the score as well
+            paint.setTextSize(100);
+            paint.setColor(Color.WHITE);
+            canvas.drawText("" + Constants.SCORE, 50, paint.descent() - paint.ascent(), paint);
 
+            //if game is over
+            if (Constants.GAME_OVER) {
+                paint.setTextSize(100);
+                paint.setTextAlign(Paint.Align.CENTER);
+                paint.setColor(Color.WHITE);
+
+                //tell the player
                 int yPos = (int) ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2));
                 canvas.drawText("Game over", canvas.getWidth() / 2, yPos, paint);
             }

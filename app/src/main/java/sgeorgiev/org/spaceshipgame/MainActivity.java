@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageButton buttonPlay;
+    private ImageButton buttonPlay, buttonScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,20 +28,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Constants.SCREEN_HEIGHT = dm.heightPixels;
         Constants.SCREEN_WIDTH = dm.widthPixels;
 
-        //get the play button
+        //get the buttons
         buttonPlay = (ImageButton) findViewById(R.id.play);
+        buttonScore = (ImageButton) findViewById(R.id.highscore);
 
         //click listener
         buttonPlay.setOnClickListener(this);
+        buttonScore.setOnClickListener(this);
     }
 
+    //start game activity when the button is tapped
     @Override
     public void onClick(View v) {
-        //start game activity when the button is tapped
-        startActivity(new Intent(this, GameActivity.class));
+        if(v == buttonPlay)
+            startActivity(new Intent(this, GameActivity.class));
+        else if(v == buttonScore)
+            startActivity(new Intent(this, HighScore.class));
     }
 
     //override back button as well so it asks you whether you're sure you want to exit
+    //and it doesnt return to the last game over screen
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

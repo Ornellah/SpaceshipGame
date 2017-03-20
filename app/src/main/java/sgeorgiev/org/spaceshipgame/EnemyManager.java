@@ -55,6 +55,8 @@ public class EnemyManager {
                     //add the ship to be destryed to the array list
                     destroyed.add(e);
                     player.destroyProjectile(p);
+                    //increment score
+                    Constants.SCORE += 10;
                 }
             }
             if(Rect.intersects(player.getHitBox(), e.getHitBox()) || Rect.intersects(player.getHitBoxWings(), e.getHitBox()))

@@ -24,6 +24,13 @@ public class Constants {
     //this will be used for testing purposes
     public static boolean TEST_MODE = false;
 
+    //used to check if the player has died
     public static boolean GAME_OVER;
+
+    //will need the frame count for a few things
+    public static int FRAME_COUNT;
+
+    //score will be saved here as well so it can be accessed from anywhere
+    public static int SCORE;
 
 }
