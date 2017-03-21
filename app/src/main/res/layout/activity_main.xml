@@ -23,8 +23,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/sound"
             android:background="@drawable/soundon"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
         />
 
         <ImageButton

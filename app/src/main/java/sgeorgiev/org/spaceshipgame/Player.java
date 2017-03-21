@@ -101,7 +101,7 @@ public class Player {
             y = minY;
         }
         if (y > maxY) {
-            y = maxY;
+           Constants.GAME_OVER = true;
         }
 
         //need to make sure the hitbox is updated every frame
