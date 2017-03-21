@@ -40,8 +40,9 @@ public class Player {
     private Rect hitBox;
     private Rect hitBoxWings;
 
-
     Sound sound;
+
+    private Shield shield;
 
     //constructor
     public Player(Context context) {
@@ -68,7 +69,11 @@ public class Player {
         projectiles = new ArrayList<>();
         removedProjectiles = new ArrayList<>();
 
+        //initialise sound
         sound = new Sound();
+
+        //initialise shield
+        shield = new Shield(this.x, this.y);
     }
 
     //setter for boosting
@@ -136,6 +141,7 @@ public class Player {
             //sound.playShoot();
         }
 
+        shield.update(this.x, this.y);
     }
 
     public void draw(Canvas canvas, Paint paint) {
@@ -148,6 +154,8 @@ public class Player {
 
         for(Projectile p : projectiles)
             p.draw(canvas, paint);
+
+        shield.draw(canvas, paint);
     }
 
     public void destroyProjectile(Projectile proj) {
@@ -186,5 +194,17 @@ public class Player {
             return true;
 
         return false;
+    }
+
+    public void setShield(boolean value) {
+        shield.setActive(value);
+    }
+
+    public boolean isShieldActive() {
+        return shield.isActive();
+    }
+
+    public Shield getShield() {
+        return shield;
     }
 }

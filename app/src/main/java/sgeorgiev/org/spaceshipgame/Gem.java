@@ -18,6 +18,7 @@ public class Gem implements GameObject {
     private Rect hitBox;
     private Random generator;
     private int type;
+    private boolean shield = false;
 
     public Gem(int x, int y) {
         this.x = x;
@@ -25,7 +26,7 @@ public class Gem implements GameObject {
         speed = 5;
         generator = new Random();
 
-        type = generator.nextInt(5);
+        type = generator.nextInt(6);
 
         if(type == 0 || type == 1) {
             bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.pu1);
@@ -33,11 +34,14 @@ public class Gem implements GameObject {
         } else if (type == 2 || type == 3) {
             bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.pu3);
             points = 20;
-        } else {
+        } else if(type == 4){
             bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.pu2);
-            points = 30;
+            points = 50;
+        } else {
+            bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.shieldicon);
+            shield = true;
+            points = 50;
         }
-
 
         hitBox = new Rect(x, y, x + bitmap.getWidth(), y + bitmap.getHeight());
     }
@@ -71,5 +75,9 @@ public class Gem implements GameObject {
 
     public Rect getHitBox() {
         return hitBox;
+    }
+
+    public boolean isShield() {
+        return shield;
     }
 }

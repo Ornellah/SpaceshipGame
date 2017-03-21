@@ -67,15 +67,20 @@ public class EnemyManager {
                 }
             }
 
-            if(Rect.intersects(player.getHitBoxWings(), e.getProjectile().getHitBox()) ||
-                    Rect.intersects(player.getHitBox(), e.getProjectile().getHitBox())) {
-                Constants.GAMEOVER_TIME = System.currentTimeMillis();
-                Constants.GAME_OVER = true;
+            if(player.isShieldActive() && Rect.intersects(player.getShield().getHitBox(), e.getProjectile().getHitBox())) {
+                player.setShield(false);
+            } else if( (Rect.intersects(player.getHitBoxWings(), e.getProjectile().getHitBox() ) ||
+                    Rect.intersects(player.getHitBox(), e.getProjectile().getHitBox())) && !player.isShieldActive() ) {
+                    Constants.GAMEOVER_TIME = System.currentTimeMillis();
+                    Constants.GAME_OVER = true;
             }
 
-            if(Rect.intersects(player.getHitBox(), e.getHitBox()) || Rect.intersects(player.getHitBoxWings(), e.getHitBox())) {
-                Constants.GAME_OVER = true;
-                Constants.GAMEOVER_TIME = System.currentTimeMillis();
+            if(player.isShieldActive() && Rect.intersects(player.getShield().getHitBox(), e.getHitBox())) {
+                player.setShield(false);
+            } else if( (Rect.intersects(player.getHitBox(), e.getHitBox()) || Rect.intersects(player.getHitBoxWings(), e.getHitBox()) )
+                    && !player.isShieldActive()) {
+                    Constants.GAME_OVER = true;
+                    Constants.GAMEOVER_TIME = System.currentTimeMillis();
             }
         }
         //destroy all ships AFTER the loop
@@ -85,6 +90,8 @@ public class EnemyManager {
         for(Gem g : gems) {
             if(player.gemCollision(g.getHitBox())) {
                 Constants.SCORE += g.getPoints();
+                if(g.isShield())
+                    player.setShield(true);
                 removedGems.add(g);
             }
             g.update(player.getSpeed());

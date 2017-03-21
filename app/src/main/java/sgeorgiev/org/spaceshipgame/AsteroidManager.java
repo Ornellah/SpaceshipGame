@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 public class AsteroidManager {
     private ArrayList<Asteroid> asteroids;
+    private int collisionFrame = 0;
 
     public AsteroidManager(int count) {
         asteroids = new ArrayList<>();
@@ -27,9 +29,13 @@ public class AsteroidManager {
     public void update(Player player) {
         for(Asteroid a : asteroids) {
             a.update(player.getSpeed());
-            if (Rect.intersects(player.getHitBox(), a.getHitBox()) || Rect.intersects(player.getHitBoxWings(), a.getHitBox())) {
-                Constants.GAME_OVER = true;
-                Constants.GAMEOVER_TIME = System.currentTimeMillis();
+
+            if(player.isShieldActive() && Rect.intersects(player.getShield().getHitBox(), a.getHitBox())) {
+                player.setShield(false);
+            } else if ((Rect.intersects(player.getHitBox(), a.getHitBox()) || Rect.intersects(player.getHitBoxWings(), a.getHitBox()))
+                    && !player.isShieldActive()) {
+                    Constants.GAME_OVER = true;
+                    Constants.GAMEOVER_TIME = System.currentTimeMillis();
             }
             for(Projectile p : player.getProjectiles()) {
                 if(Rect.intersects(p.getHitBox(), a.getHitBox()))

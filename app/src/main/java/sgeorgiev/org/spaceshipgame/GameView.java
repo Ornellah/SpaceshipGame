@@ -129,7 +129,7 @@ public class GameView extends SurfaceView implements Runnable {
             startTime = System.currentTimeMillis();
             elapsedTime = (int) (System.currentTimeMillis() - initTime)/1000;
             Constants.ELAPSED_TIME = elapsedTime;
-            Log.d("FRAMES ", ""+ Constants.FRAME_COUNT);
+            //Log.d("FRAMES ", ""+ Constants.FRAME_COUNT);
             //call update on every object
             player.update();
             enemyManager.update(player);
@@ -142,7 +142,7 @@ public class GameView extends SurfaceView implements Runnable {
                 if (Constants.SCORE > highScore[i]) {
                     final int endI = i;
                     highScore[i] = Constants.SCORE;
-                    Log.d("SCORE ", "" + highScore[i]);
+                   // Log.d("SCORE ", "" + highScore[i]);
                     break;
                 }
             }
