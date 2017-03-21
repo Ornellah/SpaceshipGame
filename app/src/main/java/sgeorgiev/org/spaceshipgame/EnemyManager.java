@@ -15,15 +15,17 @@ public class EnemyManager {
     //array list to store enemies
     private ArrayList<Enemy> enemies;
     private boolean explode = false;
-    Explosion explosion;
-    ArrayList<Enemy> destroyed;
+    private Explosion explosion;
+    private ArrayList<Enemy> destroyed;
     private int count;
     private Sound sound;
+    private ArrayList<Gem> gems;
 
     public EnemyManager(int enemyCount) {
         this.count = enemyCount;
         enemies = new ArrayList<>();
         destroyed = new ArrayList<>();
+        gems = new ArrayList<>();
         populateEnemies(count);
         sound = new Sound();
     }
@@ -35,6 +37,7 @@ public class EnemyManager {
     }
 
     public void update(Player player) {
+
         int diff = 0;
         if(enemies.size() < count) {
             diff = count - enemies.size();
@@ -59,6 +62,7 @@ public class EnemyManager {
                     player.destroyProjectile(p);
                     //increment score
                     Constants.SCORE += 10;
+                    gems.add(new Gem(e.getX(), e.getY()));
                     sound.playExplosion();
                 }
             }
@@ -77,6 +81,16 @@ public class EnemyManager {
         //destroy all ships AFTER the loop
         enemies.removeAll(destroyed);
 
+        ArrayList<Gem> removedGems = new ArrayList<>();
+        for(Gem g : gems) {
+            if(player.gemCollision(g.getHitBox())) {
+                Constants.SCORE += g.getPoints();
+                removedGems.add(g);
+            }
+            g.update(player.getSpeed());
+        }
+        gems.removeAll(removedGems);
+
         //every 9 seconds (60 fps * 9 seconds) add a new enemy to increase the difficulty of the game
         //the calculation is not particularly accurate but it works
         if(Constants.FRAME_COUNT % (60 * 9) == 0 && enemies.size() < 6 && Constants.FRAME_COUNT != 0) {
@@ -91,6 +105,9 @@ public class EnemyManager {
             //draw each space ship
             e.draw(canvas, paint);
         }
+
+        for(Gem g : gems)
+            g.draw(canvas, paint);
         //if we need an explosion
         if(explode) {
             //draw it

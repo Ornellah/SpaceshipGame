@@ -181,5 +181,10 @@ public class Player {
         return projectiles;
     }
 
+    public boolean gemCollision(Rect gemHitBox) {
+        if(Rect.intersects(hitBox, gemHitBox) || Rect.intersects(hitBoxWings, gemHitBox))
+            return true;
 
+        return false;
+    }
 }
