@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SpaceshipGame</string>
+    <string name="highscore">High Score</string>
 </resources>
