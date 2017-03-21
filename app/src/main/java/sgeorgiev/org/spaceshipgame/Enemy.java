@@ -112,4 +112,8 @@ public class Enemy implements GameObject {
     public int getSpeed() {
         return speed;
     }
+
+    public Projectile getProjectile() {
+        return projectile;
+    }
 }

@@ -41,6 +41,8 @@ public class Player {
     private Rect hitBoxWings;
 
 
+    Sound sound;
+
     //constructor
     public Player(Context context) {
         //set initial location and speed
@@ -65,6 +67,8 @@ public class Player {
         //projectiles
         projectiles = new ArrayList<>();
         removedProjectiles = new ArrayList<>();
+
+        sound = new Sound();
     }
 
     //setter for boosting
@@ -125,10 +129,11 @@ public class Player {
         projectiles.removeAll(removedProjectiles);
 
         //every 15 frames
-        if(Constants.FRAME_COUNT % 15 == 0) {
+        if(Constants.FRAME_COUNT % 30 == 0) {
             //shoot
             projectiles.add(new Projectile(x + bitmap.getWidth(),
                    y + bitmap.getHeight()/2, 20, "player"));
+            //sound.playShoot();
         }
 
     }

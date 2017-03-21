@@ -55,6 +55,8 @@ public class GameView extends SurfaceView implements Runnable {
     private long initTime, deltaTime, startTime;
     private int elapsedTime;
 
+    private Sound sound;
+
     //constructor
     public GameView(Context context) {
         super(context);
@@ -100,6 +102,9 @@ public class GameView extends SurfaceView implements Runnable {
 
         //set init time
         startTime = initTime = System.currentTimeMillis();
+
+        sound = new Sound();
+        sound.playBg();
     }
 
     @Override
@@ -132,7 +137,7 @@ public class GameView extends SurfaceView implements Runnable {
             asteroidManager.update(player);
         } else {
             playing = false;
-
+            sound.stopBg();
             for(int i = 0; i < highScore.length; i++) {
                 if (Constants.SCORE > highScore[i]) {
                     final int endI = i;
@@ -201,6 +206,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     //pause
     public void pause() {
+        sound.stopBg();
         //set paying to false
         playing = false;
         try {
@@ -210,6 +216,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     //resume
     public void resume() {
+        sound.playBg();
         // playing is true now
         playing = true;
         gameThread = new Thread(this);

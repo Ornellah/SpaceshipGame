@@ -18,12 +18,14 @@ public class EnemyManager {
     Explosion explosion;
     ArrayList<Enemy> destroyed;
     private int count;
+    private Sound sound;
 
     public EnemyManager(int enemyCount) {
         this.count = enemyCount;
         enemies = new ArrayList<>();
         destroyed = new ArrayList<>();
         populateEnemies(count);
+        sound = new Sound();
     }
 
     public void populateEnemies(int count) {
@@ -57,8 +59,16 @@ public class EnemyManager {
                     player.destroyProjectile(p);
                     //increment score
                     Constants.SCORE += 10;
+                    sound.playExplosion();
                 }
             }
+
+            if(Rect.intersects(player.getHitBoxWings(), e.getProjectile().getHitBox()) ||
+                    Rect.intersects(player.getHitBox(), e.getProjectile().getHitBox())) {
+                Constants.GAMEOVER_TIME = System.currentTimeMillis();
+                Constants.GAME_OVER = true;
+            }
+
             if(Rect.intersects(player.getHitBox(), e.getHitBox()) || Rect.intersects(player.getHitBoxWings(), e.getHitBox())) {
                 Constants.GAME_OVER = true;
                 Constants.GAMEOVER_TIME = System.currentTimeMillis();

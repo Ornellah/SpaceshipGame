@@ -37,4 +37,6 @@ public class Constants {
 
     public static long GAMEOVER_TIME = 0;
 
+    public static boolean SOUND = true;
+
 }

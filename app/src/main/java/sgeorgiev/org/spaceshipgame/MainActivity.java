@@ -9,10 +9,11 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageButton buttonPlay, buttonScore;
+    private ImageButton buttonPlay, buttonScore, buttonSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +32,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //get the buttons
         buttonPlay = (ImageButton) findViewById(R.id.play);
         buttonScore = (ImageButton) findViewById(R.id.highscore);
+        buttonSound = (ImageButton) findViewById(R.id.sound);
 
         //click listener
         buttonPlay.setOnClickListener(this);
         buttonScore.setOnClickListener(this);
+        buttonSound.setOnClickListener(this);
     }
 
     //start game activity when the button is tapped
@@ -44,6 +47,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(this, GameActivity.class));
         else if(v == buttonScore)
             startActivity(new Intent(this, HighScore.class));
+        else if(v == buttonSound) {
+            Constants.SOUND = !Constants.SOUND;
+            if(Constants.SOUND) {
+                Toast.makeText(getBaseContext(), "Sound is now on.", Toast.LENGTH_SHORT).show();
+                buttonSound.setBackgroundResource(R.drawable.soundon);
+            }
+            else {
+                Toast.makeText(getBaseContext(), "Sound is now off", Toast.LENGTH_SHORT).show();
+                buttonSound.setBackgroundResource(R.drawable.soundoff);
+            }
+        }
     }
 
     //override back button as well so it asks you whether you're sure you want to exit
