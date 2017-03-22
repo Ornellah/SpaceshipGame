@@ -67,16 +67,20 @@ public class EnemyManager {
                 }
             }
 
-            if(player.isShieldActive() && Rect.intersects(player.getShield().getHitBox(), e.getProjectile().getHitBox())) {
-                player.setShield(false);
-            } else if( (Rect.intersects(player.getHitBoxWings(), e.getProjectile().getHitBox() ) ||
-                    Rect.intersects(player.getHitBox(), e.getProjectile().getHitBox())) && !player.isShieldActive() ) {
+            for(Projectile p : e.getProjectile()) {
+                if (player.isShieldActive() && Rect.intersects(player.getShield().getHitBox(), p.getHitBox())) {
+                    player.setShield(false);
+                    e.removeProj(p);
+                } else if ((Rect.intersects(player.getHitBoxWings(), p.getHitBox()) ||
+                        Rect.intersects(player.getHitBox(), p.getHitBox())) && !player.isShieldActive()) {
                     Constants.GAMEOVER_TIME = System.currentTimeMillis();
                     Constants.GAME_OVER = true;
+                }
             }
 
             if(player.isShieldActive() && Rect.intersects(player.getShield().getHitBox(), e.getHitBox())) {
                 player.setShield(false);
+                destroyed.add(e);
             } else if( (Rect.intersects(player.getHitBox(), e.getHitBox()) || Rect.intersects(player.getHitBoxWings(), e.getHitBox()) )
                     && !player.isShieldActive()) {
                     Constants.GAME_OVER = true;

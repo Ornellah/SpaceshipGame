@@ -34,8 +34,9 @@ public class Enemy implements GameObject {
     private Rect hitBox;
 
     //enemies can shoot as well but more slowly
-    Projectile projectile;
-
+    //Projectile projectile;
+    private ArrayList<Projectile> projectiles;
+    private ArrayList<Projectile> removed;
     //constructor
     public Enemy() {
         //load image
@@ -51,7 +52,8 @@ public class Enemy implements GameObject {
         hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
 
         //initialise
-        projectile = new Projectile(this.x, this.y + bitmap.getHeight()/2, this.speed*2, "enemy");
+        projectiles = new ArrayList<>();
+        removed = new ArrayList<>();
     }
 
     @Override
@@ -61,11 +63,14 @@ public class Enemy implements GameObject {
             canvas.drawRect(hitBox, paint);
         }
         canvas.drawBitmap(bitmap, x, y, paint);
-        projectile.draw(canvas, paint);
+
+        for(Projectile p : projectiles)
+           p.draw(canvas, paint);
     }
 
     @Override
     public void update(int playerSpeed) {
+
         x -= playerSpeed;
         x -= speed;
         //if the enemy reaches the left edge
@@ -82,9 +87,15 @@ public class Enemy implements GameObject {
         hitBox.right = x + bitmap.getWidth();
         hitBox.bottom = y + bitmap.getHeight() - 10;
 
-        projectile.update("left", playerSpeed);
-        if(projectile.getX() < Constants.MIN_X)
-            projectile = new Projectile(this.x, this.y + bitmap.getHeight()/2, this.speed*2, "enemy");
+        for(Projectile p : projectiles) {
+            p.update("left", playerSpeed);
+            if (p.getX() < Constants.MIN_X)
+            removed.add(p);
+        }
+        projectiles.removeAll(removed);
+
+        if(Constants.FRAME_COUNT % (60 * 2) == 0)
+            projectiles.add(new Projectile(this.x, this.y + bitmap.getHeight()/2, this.speed*2, "enemy"));
     }
 
     public Rect getHitBox() {
@@ -113,7 +124,11 @@ public class Enemy implements GameObject {
         return speed;
     }
 
-    public Projectile getProjectile() {
-        return projectile;
+   public ArrayList<Projectile> getProjectile() {
+        return projectiles;
+    }
+
+    public void removeProj(Projectile p) {
+        removed.add(p);
     }
 }

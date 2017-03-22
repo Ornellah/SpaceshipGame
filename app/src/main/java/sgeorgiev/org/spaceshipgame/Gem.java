@@ -37,7 +37,7 @@ public class Gem implements GameObject {
         } else if(type == 4){
             bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.pu2);
             points = 50;
-        } else {
+        } else if (type == 5){
             bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.shieldicon);
             shield = true;
             points = 50;
