@@ -30,10 +30,10 @@ public class Gem implements GameObject {
 
         if(type == 0 || type == 1) {
             bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.pu1);
-            points = 10;
+            points = 20;
         } else if (type == 2 || type == 3) {
             bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.pu3);
-            points = 20;
+            points = 30;
         } else if(type == 4){
             bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.pu2);
             points = 50;

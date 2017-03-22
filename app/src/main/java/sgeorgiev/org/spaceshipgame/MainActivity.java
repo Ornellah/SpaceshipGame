@@ -3,6 +3,7 @@ package sgeorgiev.org.spaceshipgame;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.Image;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +14,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageButton buttonPlay, buttonScore, buttonSound;
+    private ImageButton buttonPlay, buttonScore, buttonSound, buttonHelp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +34,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonPlay = (ImageButton) findViewById(R.id.play);
         buttonScore = (ImageButton) findViewById(R.id.highscore);
         buttonSound = (ImageButton) findViewById(R.id.sound);
+        buttonHelp = (ImageButton) findViewById(R.id.help);
 
         //click listener
         buttonPlay.setOnClickListener(this);
         buttonScore.setOnClickListener(this);
         buttonSound.setOnClickListener(this);
+        buttonHelp.setOnClickListener(this);
     }
 
     //start game activity when the button is tapped
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(this, GameActivity.class));
         else if(v == buttonScore)
             startActivity(new Intent(this, HighScore.class));
+        else if(v == buttonHelp)
+            startActivity(new Intent(this, Help.class));
         else if(v == buttonSound) {
             Constants.SOUND = !Constants.SOUND;
             if(Constants.SOUND) {

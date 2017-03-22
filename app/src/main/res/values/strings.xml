@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">SpaceshipGame</string>
     <string name="highscore">High Score</string>
+    <string name="tap">Tap anywhere on the screen to accelerate.</string>
+    <string name="twenty">20 points</string>
+    <string name="thirty">30 points</string>
+    <string name="fifty">50 points</string>
+    <string name="shield">Shield</string>
+    <string name="help">Help</string>
+    <string name="collect">Collect:</string>
 </resources>
