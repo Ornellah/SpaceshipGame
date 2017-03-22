@@ -39,7 +39,7 @@ public class Enemy implements GameObject {
     //constructor
     public Enemy() {
         //load image
-        bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.enemy2);
+        bitmap = BitmapFactory.decodeResource(Constants.CURR_CONTEXT.getResources(), R.drawable.enemy);
 
         //create a random generator
         generator = new Random();
@@ -82,7 +82,7 @@ public class Enemy implements GameObject {
         hitBox.right = x + bitmap.getWidth();
         hitBox.bottom = y + bitmap.getHeight() - 10;
 
-        projectile.update("left");
+        projectile.update("left", playerSpeed);
         if(projectile.getX() < Constants.MIN_X)
             projectile = new Projectile(this.x, this.y + bitmap.getHeight()/2, this.speed*2, "enemy");
     }

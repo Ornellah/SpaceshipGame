@@ -54,8 +54,9 @@ public class Projectile implements GameObject {
         hitBox.bottom = y + bitmap.getHeight();
     }
 
-    public void update(String direction) {
+    public void update(String direction, int playerSpeed) {
         x -= speed;
+        x-=playerSpeed;
         hitBox.left = x;
         hitBox.top = y;
         hitBox.right = x + bitmap.getWidth();

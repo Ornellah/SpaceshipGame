@@ -52,7 +52,7 @@ public class Planet implements GameObject {
     }
 
     public boolean getState() {
-        if(x < Constants.MIN_X)
+        if(x < Constants.MIN_X - planet.getWidth())
             return true;
 
         return false;
