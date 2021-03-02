@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="sgeorgiev.org.spaceshipgame.MainActivity"
+    tools:context="ornellah.org.spaceshipgame.MainActivity"
     android:background="@drawable/menu"
     android:id="@+id/mainMenu"
     android:layout_alignParentBottom="true"
