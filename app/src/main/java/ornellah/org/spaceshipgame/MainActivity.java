@@ -106,7 +106,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if(v == buttonPlay)
+        {
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+            } else {
+                Log.d("TAG", "The interstitial wasn't loaded yet.");
+            }
             startActivity(new Intent(this, GameActivity.class));
+        }
         else if(v == buttonScore)
             startActivity(new Intent(this, HighScore.class));
         else if(v == buttonHelp)
@@ -121,11 +128,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(getBaseContext(), "Sound is now off", Toast.LENGTH_SHORT).show();
                 buttonSound.setBackgroundResource(R.drawable.soundoff);
             }
-        }
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        } else {
-            Log.d("TAG", "The interstitial wasn't loaded yet.");
         }
     }
 
