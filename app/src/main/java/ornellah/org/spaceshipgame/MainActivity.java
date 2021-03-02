@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onAdClosed() {
                 // Load the next interstitial.
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                startActivity(new Intent(MainActivity.this, GameActivity.class));
             }
 
         });
@@ -102,6 +102,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonHelp.setOnClickListener(this);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+    }
+
     //start game activity when the button is tapped
     @Override
     public void onClick(View v) {
@@ -111,8 +123,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mInterstitialAd.show();
             } else {
                 Log.d("TAG", "The interstitial wasn't loaded yet.");
+                startActivity(new Intent(this, GameActivity.class));
             }
-            startActivity(new Intent(this, GameActivity.class));
         }
         else if(v == buttonScore)
             startActivity(new Intent(this, HighScore.class));
