@@ -1,9 +1,11 @@
 package ornellah.org.spaceshipgame;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -113,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
+
 
     //start game activity when the button is tapped
     @Override

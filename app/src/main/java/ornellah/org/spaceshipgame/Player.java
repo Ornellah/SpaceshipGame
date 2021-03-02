@@ -7,8 +7,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Vibrator;
 
 import java.util.ArrayList;
+
 
 /**
  * Created by Svetlozar Georgiev on 17/03/2017.
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 public class Player {
     //player image
     private Bitmap bitmap;
+
 
     //coordinates
     private int x;
@@ -46,6 +49,7 @@ public class Player {
 
     //constructor
     public Player(Context context) {
+
         //set initial location and speed
         x = 75;
         y = 50;
@@ -107,6 +111,7 @@ public class Player {
         }
         if (y > maxY) {
            Constants.GAME_OVER = true;
+           Constants.VIBRATE.set(true);
         }
 
         //need to make sure the hitbox is updated every frame

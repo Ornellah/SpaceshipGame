@@ -1,6 +1,9 @@
 package ornellah.org.spaceshipgame;
 
 import android.content.Context;
+import android.os.Vibrator;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Svetlozar Georgiev on 17/03/2017.
@@ -38,5 +41,8 @@ public class Constants {
     public static long GAMEOVER_TIME = 0;
 
     public static boolean SOUND = true;
+
+
+    public static AtomicBoolean VIBRATE= new AtomicBoolean(false);
 
 }

@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Handler;
+import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -54,12 +56,18 @@ public class GameView extends SurfaceView implements Runnable {
     private int elapsedTime;
 
     private Sound sound;
+    private Vibrator vib;
+    private Handler handler;
 
     //constructor
     public GameView(Context context) {
         super(context);
 
+        handler = new Handler();
+        vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
         Constants.GAME_OVER = false;
+        Constants.VIBRATE.set(false);
 
         //initialise random gen
         generator = new Random();
@@ -117,6 +125,18 @@ public class GameView extends SurfaceView implements Runnable {
             draw();
             //control
             control();
+
+            if(Constants.VIBRATE.get()){
+                Constants.VIBRATE.set(false);
+                System.out.println("toto");
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        vib.vibrate(1000);
+                        System.out.println("toto2");
+                    }
+                });
+            }
         }
     }
 
